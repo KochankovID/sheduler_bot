@@ -58,8 +58,8 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  schedule:
+    handler: handler.schedule
     events:
       - http:
           path: bot
