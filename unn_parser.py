@@ -5,7 +5,7 @@ import requests
 
 
 r = requests.get(
-    url="https://portal.unn.ru/ruzapi/schedule/student/96414",
+    url="https://portal.unn.ru/ruzapi/schedule/student/125633",
     params={
         "start": datetime.now().strftime('%Y-%m-%d'),
         "finish": datetime.now().strftime('%Y-%m-%d'),
@@ -48,7 +48,7 @@ if r.status_code == 200:
 pprint(outputs)
 
 r = requests.get(
-    url="https://portal.unn.ru/ruzapi/schedule/student/96414",
+    url="https://portal.unn.ru/ruzapi/schedule/student/125633",
     params={
         "start": (datetime.now() + timedelta(days=3)).strftime('%Y-%m-%d'),
         "finish": (datetime.now() + timedelta(days=3)).strftime('%Y-%m-%d'),

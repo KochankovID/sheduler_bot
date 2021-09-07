@@ -22,7 +22,7 @@ frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.9
   lambdaHashingVersion: 20201221
   stage: dev
   region: eu-central-1
@@ -59,7 +59,8 @@ provider:
 
 functions:
   schedule:
-    handler: handler.schedule
+    handler: handler.schedule_event
+    timeout: 10
     events:
       - http:
           path: bot
@@ -116,3 +117,5 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+plugins:
+  - serverless-python-requirements

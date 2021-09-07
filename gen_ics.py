@@ -167,7 +167,7 @@ class MessageGenerator:
     DAY_HEADER = '''------------{date}-------------
 #{weekday} #{wdslug}'''
 
-    LECTURE_HEADER = '''{beginLesson}-{endLesson} {auditorium} {building}\n'''
+    LECTURE_HEADER = '''{beginLesson}-{endLesson} {auditorium} {building}'''
 
     LECTURE_STR = '''-----------------------------------
 {discipline}
@@ -264,15 +264,14 @@ class ScheduleBot:
         return {"statusCode": 200, "body": "complete"}
 
     def send_ics(self, start: datetime):
-        file_name = '/tmp/my.ics'
-        timetable = self.get_schedule(start=start)
+        timetable = self.get_schedule(start)
         ics = IcsGenerator.ics(timetable)
 
-        with open(file_name, 'w') as f:
+        with open('my.ics', 'w') as f:
             f.write(str(ics))
 
         try:
-            self.telegramm.send_document(file_name)
+            self.telegramm.send_document('my.ics')
         except RuntimeError as e:
             print(str(e))
             return {"statusCode": 500, "body": str(e)}
@@ -280,8 +279,8 @@ class ScheduleBot:
         return {"statusCode": 200, "body": "complete"}
 
     @lru_cache
-    def get_schedule(self, start: datetime = datetime.now()) -> Schedule:
-        raw_timetable = self.unn.get_schedule(start=start, finish=start + timedelta(days=6))
+    def get_schedule(self, start: datetime) -> Schedule:
+        raw_timetable = self.unn.get_schedule(finish=start + timedelta(days=6))
         return Parcer.parce_schedule(raw_timetable)
 
 
@@ -293,10 +292,10 @@ class ScheduleBot:
 #     schedule_bot.send_ics(datetime.now())
 
 
-def schedule_event(event, _):
+def schedule_event(event, context):
     event_date = datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
     client = '125633'
     token = env('TELEGRAM_TOKEN')
-    schedule_bot = ScheduleBot(client, token, debug=False)
+    schedule_bot = ScheduleBot(client, token)
     schedule_bot.send_schedule_per_day(event_date)
     schedule_bot.send_ics(event_date)

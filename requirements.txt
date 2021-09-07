@@ -1,3 +1,6 @@
 environs
 requests
 pydantic
+backoff
+ics
+furl
